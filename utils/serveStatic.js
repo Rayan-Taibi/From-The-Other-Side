@@ -16,6 +16,16 @@ export async function serveStatic(req , res , baseDir){
         sendResponse(res , 200 , contentType , content)
 
     }catch(err){
-        console.log(err)
+        if(err.code === 'ENOENT'){
+            const errFilePath = path.join(folderpath ,  '404.html' )
+            const errExt = path.extname(errFilePath)
+            const errContentType = getContentType(errExt)
+            const errContent = await fs.readFile(errFilePath)
+            sendResponse(res , 404 , errContentType , errContent)
+
+        }else{
+            sendResponse(res , 500 , 'text/html' , '<html><body><h1>Internal Server Error</h1></body></html>')
+        }
+       
     }
 }
