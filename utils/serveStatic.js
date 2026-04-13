@@ -1,16 +1,19 @@
 import path from 'node:path'
 import fs from 'node:fs/promises'
 import {sendResponse} from './sendRespond.js'
+import {getContentType} from './getContentType.js'
+
 
 export async function serveStatic(req , res , baseDir){
 
-  
-
-    const filePath = path.join(baseDir, 'index.html' ) // here we are joining the base directory with the requested url. If the url is '/' then we will serve 'index.html' file. if not then we will serve the requested file.
-    
+    const folderpath = baseDir
+    const filePath = path.join(folderpath , req.url === '/' ? 'index.html' : req.url)
+    const ext = path.extname(filePath)
+    const contentType = getContentType(ext)
     try{
         const content = await fs.readFile(filePath)
-        sendResponse(res , 200 , 'text/html' , content)
+        
+        sendResponse(res , 200 , contentType , content)
 
     }catch(err){
         console.log(err)
