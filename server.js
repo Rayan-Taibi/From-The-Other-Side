@@ -1,11 +1,28 @@
 import http from 'node:http'
+import path from 'node:path'
 import {serveStatic} from './utils/serveStatic.js'
-
+import { handleGet } from './handlers/routeHandlers.js'
+import { handlePost } from './handlers/routeHandlers.js'
 const PORT = 8000
 const __dirname = import.meta.dirname
-console.log(__dirname)
+
+
 const server = http.createServer(async (req,res) => {
-    await serveStatic(req, res, __dirname)
+
+    if(req.url === '/api'){
+        if(req.method === 'GET'){
+        
+            const response = await handleGet(req , res)
+            return response
+        }
+        if(req.method === 'POST'){     
+            const response =  await handlePost(req , res)
+            return response
+        }
+    
+    }else{
+       return await serveStatic(req, res, __dirname)
+    }
 })
 
 server.listen(PORT , () => {
