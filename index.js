@@ -1,3 +1,5 @@
+const container = document.querySelector(".cards-container")
+
 try {
   const data = await fetch("/api")
   const response = await data.json()
@@ -7,7 +9,7 @@ try {
 }
 
 function renderCards(cardsData) {
-  const container = document.querySelector(".cards-container")
+  if (!container) return
   let cardsHTML = ""
 
   cardsData.forEach((card, i) => {
@@ -27,7 +29,7 @@ function renderCards(cardsData) {
 }
 
 // handle card expand/collapse
-document.querySelector(".cards-container").addEventListener("click", (e) => {
+if (container) container.addEventListener("click", (e) => {
   if (!e.target.classList.contains("read-more-btn")) return
 
   const button = e.target
