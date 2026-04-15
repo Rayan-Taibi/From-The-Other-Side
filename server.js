@@ -16,7 +16,7 @@ const server = http.createServer(async (req,res) => {
             return response
         }
         if(req.method === 'POST'){     
-             handlePost(req , res)
+               return handlePost(req , res)
             
         }
     

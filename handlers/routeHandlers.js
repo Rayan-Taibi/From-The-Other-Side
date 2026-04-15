@@ -2,6 +2,7 @@ import { sendResponse } from "../utils/sendRespond.js"
 import { getData } from "../utils/getData.js"
 import { parseJSONBody } from "../utils/parseJSONBody.js"
 import { addNewSighting } from "../utils/addNewSighting.js"
+import { sightingEvents } from "../events/sightingEvents.js"
 export async function handleGet(req , res){
     const data = await getData()
     const stringifiedData  =JSON.stringify(data)
@@ -14,6 +15,14 @@ export async function handlePost(req , res) {
     try{
         const parsedBody = await parseJSONBody(req)
         await addNewSighting(parsedBody)
+
+        sightingEvents.emit('sighting-added' , parsedBody)
+
+
+
+
+
+
         sendResponse(res , 201 , 'application/json' , JSON.stringify(parsedBody))
         
     }catch(err){
